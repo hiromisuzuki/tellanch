@@ -1,8 +1,9 @@
 package config
 
 import (
-	"github.com/spf13/viper"
 	"strconv"
+
+	"github.com/spf13/viper"
 )
 
 type Host struct {
@@ -13,10 +14,10 @@ type Host struct {
 	Path    []string
 }
 
-// Manager []*Host
-type Manager []*Host
+// ConfigManager []*Host
+type ConfigManager []*Host
 
-func (c *Manager) Load() {
+func (c *ConfigManager) Load() {
 	for no := 0; ; {
 		no++
 		key := "hosts.host" + strconv.Itoa(no)

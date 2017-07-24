@@ -34,8 +34,8 @@ var cfgFile string
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "tellanch",
-	Short: "tell a branches application",
-	Long: "tell a branches application",
+	Short: "Tell a current branch name application",
+	Long:  "Tell a current branch name application",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },

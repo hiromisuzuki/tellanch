@@ -23,12 +23,9 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net"
-	"strconv"
-	"time"
 
+	"github.com/hiromisuzuki/tellanch/cmd/session"
 	"github.com/hiromisuzuki/tellanch/config"
 	"github.com/spf13/cobra"
 	"golang.org/x/crypto/ssh"
@@ -37,10 +34,10 @@ import (
 // getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:   "get",
-	Short: "Get branch name from git",
-	Long:  `Get branch name from git`,
+	Short: "Get current branch name",
+	Long:  `Get current branch name`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var c config.Manager
+		var c config.ConfigManager
 		c.Load()
 		for _, v := range c {
 			connect(v)
@@ -49,41 +46,13 @@ var getCmd = &cobra.Command{
 }
 
 func connect(v *config.Host) {
-	f, err := ioutil.ReadFile(v.Key)
-	if err != nil {
-		panic(err)
-	}
-	key, err := ssh.ParsePrivateKey(f)
-	if err != nil {
-		panic(err)
-	}
+	var s session.SessionProvider
+	s.Host = v
 
-	config := &ssh.ClientConfig{
-		User: v.User,
-		Auth: []ssh.AuthMethod{
-			ssh.PublicKeys(key),
-		},
-		HostKeyCallback: func(string, net.Addr, ssh.PublicKey) error {
-			return nil
-		},
-		Timeout: time.Second * 30,
-	}
-	port := v.Port
-	if port == 0 {
-		port = 22
-	}
-
-	conn, err := ssh.Dial("tcp", v.Address+":"+strconv.Itoa(port), config)
+	session, err := s.NewSession()
 	if err != nil {
 		log.Println(err)
 	}
-	defer conn.Close()
-
-	session, err := conn.NewSession()
-	if err != nil {
-		log.Println(err)
-	}
-	defer session.Close()
 
 	for _, p := range v.Path {
 		fmt.Println(branch(session, p))
@@ -102,14 +71,4 @@ func branch(session *ssh.Session, path string) string {
 
 func init() {
 	RootCmd.AddCommand(getCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// getCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

@@ -34,7 +34,7 @@ var hostsCmd = &cobra.Command{
 	Short: "Show hosts",
 	Long:  `Show hosts`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var c config.Manager
+		var c config.ConfigManager
 		c.Load()
 		for i, v := range c {
 			fmt.Println("Host No. " + strconv.Itoa(i+1))
