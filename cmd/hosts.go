@@ -21,26 +21,26 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/hiromisuzuki/tellanch/config"
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/hiromisuzuki/tellanch/config"
+	"github.com/spf13/cobra"
 )
 
 // hostsCmd represents the hosts command
 var hostsCmd = &cobra.Command{
 	Use:   "hosts",
-	Short: "Show hosts",
-	Long:  `Show hosts`,
+	Short: "Show host settings in .tellanch.yaml",
+	Long:  `Show host settings in .tellanch.yaml`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var c config.ConfigManager
 		c.Load()
 		for i, v := range c {
-			fmt.Println("Host No. " + strconv.Itoa(i+1))
+			fmt.Println("Host " + strconv.Itoa(i+1))
 			fmt.Println("  User: " + v.User)
-			fmt.Println("  Address: " + v.Address)
-			fmt.Println("  Port: " + strconv.Itoa(v.Port))
+			fmt.Println("  Address: " + v.GetAddress())
 			fmt.Println("  Key: " + v.Key)
 			fmt.Println("  Path: " + strings.Join(v.Path, ", "))
 		}
@@ -49,14 +49,4 @@ var hostsCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(hostsCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// hostsCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// hostsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

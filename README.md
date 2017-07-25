@@ -6,9 +6,11 @@ tellanch - Tell a current branch name of Git using SSH.
 
 ```
 go get github.com/hiromisuzuki/tellanch
+cd tellanch
+go install
 ```
 
-## HOW USE
+## HOW TO USE
 
 Create config file: `~/.tellanch.yaml`
 
@@ -20,7 +22,7 @@ hosts:
     port: [SSH port|default:22]
     key: [SSH key address]
     path:
-      - [Git project path in remote]
+      - [Git project path]
   host2:
     ...
 
@@ -28,8 +30,39 @@ hosts:
 
 ```
 
+Run `hosts` command
+
 ```
-$ go run main.go get
+$ tellanch hosts
+
+$ Host 1
+    User: [SSH username]
+    Address: [SSH address]:[SSH port|default:22]
+    Key: [SSH key address]
+    Path: [Git project path1]
+  Host 2
+    User: [SSH username]
+    Address: [SSH address]:[SSH port|default:22]
+    Key: [SSH key address]
+    Path: [Git project path1], [Git project path2]...
+
+```
+
+Run `get` command
+
+```
+$ tellanch get
+
+Using config file: /path/to/.tellanch.yaml
+[hosts.host1.path1] ~ 
+ref: refs/heads/develop
+~ 
+[hosts.host1.path2] ~ 
+ref: refs/heads/feature/foo-feature
+~
+[hosts.host1.path3] ~ 
+ref: refs/heads/feature/bar-feature
+
 ```
 
 ## AUTHOR

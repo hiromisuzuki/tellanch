@@ -21,52 +21,31 @@
 package cmd
 
 import (
-	"bytes"
 	"fmt"
-	"log"
 
-	"github.com/hiromisuzuki/tellanch/cmd/session"
 	"github.com/hiromisuzuki/tellanch/config"
+	"github.com/hiromisuzuki/tellanch/session"
 	"github.com/spf13/cobra"
-	"golang.org/x/crypto/ssh"
 )
 
 // getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:   "get",
-	Short: "Get current branch name",
-	Long:  `Get current branch name`,
+	Short: `Get current branch name(in ".git/HEAD")`,
+	Long:  `Get current branch name(in ".git/HEAD")`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var c config.ConfigManager
+		var s session.SessionProvider
 		c.Load()
 		for _, v := range c {
-			connect(v)
+			s.Host = v
+			session, err := s.NewSession()
+			if err != nil {
+				panic(err)
+			}
+			fmt.Println(session.Run())
 		}
 	},
-}
-
-func connect(v *config.Host) {
-	var s session.SessionProvider
-	s.Host = v
-
-	session, err := s.NewSession()
-	if err != nil {
-		log.Println(err)
-	}
-
-	for _, p := range v.Path {
-		fmt.Println(branch(session, p))
-	}
-}
-
-func branch(session *ssh.Session, path string) string {
-	var b bytes.Buffer
-	session.Stdout = &b
-	c := "pwd " + path
-	if err := session.Run(c); err != nil {
-		panic("Failed to run [" + c + "]: " + err.Error())
-	}
-	return b.String()
 }
 
 func init() {

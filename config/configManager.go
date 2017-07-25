@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Host Host
 type Host struct {
 	User    string
 	Address string
@@ -32,4 +33,22 @@ func (c *ConfigManager) Load() {
 			Path:    viper.GetStringSlice(key + ".path"),
 		})
 	}
+}
+
+func (h *Host) GetAddress() string {
+	return h.Address + ":" + strconv.Itoa(h.GetPort())
+}
+
+func (h *Host) GetPort() int {
+	if h.Port == 0 {
+		return 22
+	}
+	return h.Port
+}
+
+func (h *Host) GetKey() *string {
+	if h.Key == "" {
+		return nil
+	}
+	return &h.Key
 }
