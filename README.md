@@ -1,6 +1,6 @@
 # tellanch
 
-tellanch - Tell a current branch name of Git using SSH.
+tellanch - Tell a current branch name of Git, using SSH.
 
 ## INSTALLATION
 
