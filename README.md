@@ -67,4 +67,4 @@ ref: refs/heads/feature/bar-feature
 
 ## AUTHOR
 
-hsuzuki [http://hsuzuki.hatenablog.com/](http://hsuzuki.hatenablog.com/)
+hsuzuki [https://hsuzuki.hatenablog.com/](https://hsuzuki.hatenablog.com/)
